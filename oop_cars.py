@@ -7,6 +7,12 @@
   * Метод «услуга покраски автомобиля»
 """
 
+# __all__ = (
+#     'Car', 'SuperCar', 'AutoSalon',
+# )
+
+reg_id = 0
+
 
 class Car:
 
@@ -26,24 +32,8 @@ class Car:
         return f"{self.id}: {self.model_name}(vin={self.vin}) {self.__class__.__name__} {self.price} {self.color}"
 
 
-reg_id = 0
-
-
-car1 = Car()
-car1.price = 10
-car1.color = 'white'
-
-car2 = Car(model_name='Mazda', price=11, color='cyan')
-
-car3 = Car('Toyota', 10, 'white', vin=hex(121243).upper()[2:])
-
-print(car1, car2, car3, sep='\n')
-# print('-'*60)
-# print('car1', car1.price, car1.color)
-# print('car2', car2.price, car2.color)
-# print('car3', car3.price, car3.color)
-
-print('=' * 60)
+class SuperCar(Car):
+    pass
 
 
 class AutoSalon:
@@ -103,31 +93,69 @@ class AutoSalon:
         self.append(Car('Toyota', 10, 'white', vin=hex(121243).upper()[2:]))
 
 
-salon1 = AutoSalon('АВТ Бавария')
-salon1.append(car1)
-salon1.append(car3)
-print(salon1)
+class Store(AutoSalon):
 
-try:
-    print(f"\nПродан автомобиль {str(salon1.sale(10))}\n")
-except IndexError as e:
-    print(str(e))
-else:
+    def __init__(self, name):
+        super().__init__(name)
+        self.sold = list()
+
+    def sale(self, car_id):
+        car = super().sale(car_id)
+        self.sold.append(car)
+        return car
+
+
+if __name__ == "__main__":
+    car1 = Car()
+    car1.price = 10
+    car1.color = 'white'
+
+    car2 = Car(model_name='Mazda', price=11, color='cyan')
+
+    car3 = Car('Toyota', 10, 'white', vin=hex(121243).upper()[2:])
+
+    print(car1, car2, car3, sep='\n')
+    # print('-'*60)
+    # print('car1', car1.price, car1.color)
+    # print('car2', car2.price, car2.color)
+    # print('car3', car3.price, car3.color)
+
+    print('=' * 60)
+
+    salon1 = AutoSalon('АВТ Бавария')
+    salon1.append(car1)
+    salon1.append(car3)
+    print(salon1)
+
+    try:
+        print(f"\nПродан автомобиль {str(salon1.sale(10))}\n")
+    except IndexError as e:
+        print(str(e))
+    else:
+        print(salon1)
+
+
+    print(f"Продан автомобиль {str(salon1.sale(1))}")
+    print(salon1)
+
+    salon1.profit += salon1.paint(car2, 'black')
+    print(car2)
+    print(salon1)
+
+    car = salon1.search(3)
+    salon1.paint(car, 'green')
     print(salon1)
 
 
-print(f"Продан автомобиль {str(salon1.sale(1))}")
-print(salon1)
-
-salon1.profit += salon1.paint(car2, 'black')
-print(car2)
-print(salon1)
-
-car = salon1.search(3)
-salon1.paint(car, 'green')
-print(salon1)
+    # salon2 = AutoSalon('Соломенский авторынок')
+    # salon2.append(car2)
+    # print(salon2)
 
 
-# salon2 = AutoSalon('Соломенский авторынок')
-# salon2.append(car2)
-# print(salon2)
+print('='*80)
+print('='*80)
+
+print('Имя модуля (__name__) =', repr(__name__))
+
+print('='*80)
+print('='*80)
